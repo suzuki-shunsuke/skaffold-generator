@@ -93,18 +93,15 @@ We don't specify `mongodb` by arguments but the service `api` depends on `mongod
 ## Usage
 
 ```
-$ skaffold-generator help
+$ skaffold-generator --help
 NAME:
    skaffold-generator - generate skaffold.yaml
 
 USAGE:
-   skaffold-generator [global options] command [command options] [arguments...]
+   skaffold-generator [global options] [arguments...]
 
 VERSION:
    0.1.0-0
-
-COMMANDS:
-   help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
    --src value, -s value   configuration file path (skaffold-generator.yaml) (default: "skaffold-genera
