@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/radovskyb/watcher"
+	"github.com/suzuki-shunsuke/skaffold-generator/pkg/constant"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v2"
 )
@@ -22,8 +23,9 @@ type Runner struct {
 
 func (runner *Runner) Run(ctx context.Context, args ...string) error {
 	app := &cli.App{
-		Name:  "skaffold-generator",
-		Usage: "generate skaffold.yaml",
+		Name:    "skaffold-generator",
+		Usage:   "generate skaffold.yaml",
+		Version: constant.Version,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "src",
@@ -74,6 +76,8 @@ func (runner *Runner) action(c *cli.Context) error {
 			case <-w.Closed:
 				log.Println("watcher is closed")
 				return
+			case <-c.Done():
+				w.Close()
 			}
 		}
 	}()
@@ -82,12 +86,11 @@ func (runner *Runner) action(c *cli.Context) error {
 		return err
 	}
 
+	log.Println("start to watch skaffold-generator.yaml")
 	if err := w.Start(time.Millisecond * 100); err != nil {
 		return fmt.Errorf("failed to start watching: %w", err)
 	}
 
-	log.Println("start to watch skaffold-generator.yaml")
-	<-c.Done()
 	return nil
 }
 
