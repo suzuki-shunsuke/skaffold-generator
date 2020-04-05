@@ -2,3 +2,7 @@ skaffold.yaml
 skaffold-generator.yaml
 .git-rm-branch.yml
 !examples/skaffold-generator.yaml
+/profile.out
+/.coverage
+coverage.txt
+dist
