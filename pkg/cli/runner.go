@@ -31,11 +31,13 @@ func (runner *Runner) Run(ctx context.Context, args ...string) error {
 				Name:    "src",
 				Aliases: []string{"s"},
 				Usage:   "configuration file path (skaffold-generator.yaml)",
+				Value:   "skaffold-generator.yaml",
 			},
 			&cli.StringFlag{
 				Name:    "dest",
 				Aliases: []string{"d"},
 				Usage:   "generated configuration file path (skaffold.yaml)",
+				Value:   "skaffold.yaml",
 			},
 		},
 		Action: runner.action,
@@ -53,26 +55,26 @@ func (runner *Runner) action(c *cli.Context) error {
 		targets[arg] = struct{}{}
 	}
 
-	src := "skaffold-generator.yaml"
-	dest := "skaffold.yaml"
+	src := c.String("src")
+	dest := c.String("dest")
 
 	parser := &ConfigParser{path: src}
 	writer := &ConfigWriter{path: dest}
 
 	if err := runner.Generate(parser, writer, targets); err != nil {
-		log.Println("failed to update skaffold.yaml", err)
+		log.Println("failed to update "+dest, err)
 	}
 
 	go func() {
 		for {
 			select {
 			case <-w.Event:
-				log.Println("detect the update of skaffold-generator.yaml")
+				log.Println("detect the update of " + src)
 				if err := runner.Generate(parser, writer, targets); err != nil {
-					log.Println("failed to update skaffold.yaml", err)
+					log.Println("failed to update "+dest, err)
 				}
 			case err := <-w.Error:
-				log.Println("error occurs on watching skaffold-generator.yaml", err)
+				log.Println("error occurs on watching "+src, err)
 			case <-w.Closed:
 				log.Println("watcher is closed")
 				return
@@ -86,7 +88,7 @@ func (runner *Runner) action(c *cli.Context) error {
 		return err
 	}
 
-	log.Println("start to watch skaffold-generator.yaml")
+	log.Println("start to watch " + src)
 	if err := w.Start(time.Millisecond * 100); err != nil {
 		return fmt.Errorf("failed to start watching: %w", err)
 	}
