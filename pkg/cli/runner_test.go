@@ -131,7 +131,7 @@ func TestConfigParser_Parse(t *testing.T) {
 					},
 				},
 			},
-			targets: map[string]struct{}{"mongodb": struct{}{}},
+			targets: map[string]struct{}{"mongodb": {}},
 			exp: map[string]interface{}{
 				"build": map[string]interface{}{
 					"artifacts": []interface{}{

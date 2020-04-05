@@ -15,9 +15,9 @@ import (
 )
 
 type Runner struct {
-	stdin  io.Reader
-	stdout io.Writer
-	stderr io.Writer
+	Stdin  io.Reader
+	Stdout io.Writer
+	Stderr io.Writer
 }
 
 func (runner *Runner) Run(ctx context.Context, args ...string) error {
