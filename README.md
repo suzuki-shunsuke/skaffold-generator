@@ -1,5 +1,11 @@
 # skaffold-generator
 
+[![Build Status](https://cloud.drone.io/api/badges/suzuki-shunsuke/skaffold-generator/status.svg)](https://cloud.drone.io/suzuki-shunsuke/skaffold-generator)
+[![codecov](https://codecov.io/gh/suzuki-shunsuke/skaffold-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/suzuki-shunsuke/skaffold-generator)
+[![Go Report Card](https://goreportcard.com/badge/github.com/suzuki-shunsuke/skaffold-generator)](https://goreportcard.com/report/github.com/suzuki-shunsuke/skaffold-generator)
+[![GitHub last commit](https://img.shields.io/github/last-commit/suzuki-shunsuke/skaffold-generator.svg)](https://github.com/suzuki-shunsuke/skaffold-generator)
+[![License](http://img.shields.io/badge/license-mit-blue.svg?style=flat-square)](https://raw.githubusercontent.com/suzuki-shunsuke/skaffold-generator/master/LICENSE)
+
 CLI tool to generate skaffold.yaml to build and deploy only required services
 
 ## Motivation
