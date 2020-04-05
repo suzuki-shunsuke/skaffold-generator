@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -195,7 +196,7 @@ func TestConfigParser_Parse(t *testing.T) {
 				},
 				"deploy": map[string]interface{}{
 					"kubectl": map[string]interface{}{
-						"manifests": []string{"mongodb.yaml", "app.yaml"},
+						"manifests": []string{"app.yaml", "mongodb.yaml"},
 					},
 				},
 			},
@@ -210,6 +211,14 @@ func TestConfigParser_Parse(t *testing.T) {
 				return
 			}
 			require.Nil(t, err)
+			artifacts := cfg["build"].(map[string]interface{})["artifacts"].([]interface{})
+			sort.Slice(artifacts, func(i, j int) bool {
+				a := artifacts[i].(map[string]interface{})["image"].(string)
+				b := artifacts[j].(map[string]interface{})["image"].(string)
+				return a < b
+			})
+			manifests := cfg["deploy"].(map[string]interface{})["kubectl"].(map[string]interface{})["manifests"].([]string)
+			sort.Strings(manifests)
 			require.Equal(t, d.exp, cfg)
 		})
 	}
