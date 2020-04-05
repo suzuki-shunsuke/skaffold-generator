@@ -14,6 +14,6 @@ spec:
         app: foo
     spec:
       containers:
-      - image: foo
-        name: foo
+        - image: foo
+          name: foo
       restartPolicy: Always

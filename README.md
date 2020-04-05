@@ -1,6 +1,6 @@
 # skaffold-generator
 
-CLI tool to generate skaffold.yaml dynamically to launch only required services
+CLI tool to generate skaffold.yaml to build and deploy only required services
 
 ## Motivation
 
@@ -118,27 +118,27 @@ skaffold-generator.yaml
 ```yaml
 ---
 services:
-- name: mongodb # service name
+- name: mongodb # service name. This is used to specify the service by command line arguments and depends_on
   manifests: # skaffold.yaml's `deploy.kubectl.manifests`
-  - "mongodb.yaml"
+    - "mongodb.yaml"
   artifacts: # skaffold.yaml's `build.artifacts`
-  - image: mongodb
-    context: .
-    docker:
-      dockerfile: mongodb/Dockerfile
-    sync:
-      infer:
-      - 'mongodb/etc/**/*'
+    - image: mongodb
+      context: .
+      docker:
+        dockerfile: mongodb/Dockerfile
+      sync:
+        infer:
+          - 'mongodb/etc/**/*'
 - name: api
   depends_on: # service names which this service depends on
-  - mongodb
+    - mongodb
   manifests:
-  - "api.yaml"
+    - "api.yaml"
   artifacts:
-  - image: api
-    context: .
-    docker:
-      dockerfile: api/Dockerfile
+    - image: api
+      context: .
+      docker:
+        dockerfile: api/Dockerfile
 # base `skaffold.yaml`.
 # `deploy.kubectl.manifests` and `build.artifacts` are overwritten.
 base:

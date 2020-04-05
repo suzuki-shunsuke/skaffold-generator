@@ -14,6 +14,6 @@ spec:
         app: mongodb
     spec:
       containers:
-      - image: mongo
-        name: mongodb
+        - image: mongo
+          name: mongodb
       restartPolicy: Always
