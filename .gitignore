@@ -1,3 +1,4 @@
 skaffold.yaml
 skaffold-generator.yaml
 .git-rm-branch.yml
+!examples/skaffold-generator.yaml

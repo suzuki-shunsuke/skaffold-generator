@@ -1,0 +1,23 @@
+---
+services:
+- name: mongodb
+  manifests:
+  - "mongodb.yaml"
+- name: api
+  depends_on:
+  - mongodb
+  manifests:
+  - "api.yaml"
+  artifacts:
+  - image: api
+    context: api
+- name: foo
+  manifests:
+  - "foo.yaml"
+  artifacts:
+  - image: foo
+    docker:
+      dockerfile: foo/Dockerfile
+base:
+  apiVersion: skaffold/v2alpha4
+  kind: Config
