@@ -32,7 +32,7 @@ volumes:
     temp: {}
 steps:
   - name: download go modules
-    image: &image_go golang:1.14.2
+    image: golang:1.14.2
     commands:
       - go mod download
     volumes: &volumes
@@ -48,7 +48,7 @@ steps:
       GOPATH: /go
     volumes: *volumes
   - name: codecov
-    image: *image_go
+    image: golang:1.14.2
     commands:
       # bash and cgo seem to be required
       - bash scripts/codecov_test.sh
@@ -85,18 +85,10 @@ steps:
       event:
         - tag
 
-  - name: create a dummy tag to test releasing
-    image: *image_git
-    commands:
-      - git tag v0.1.0-alpha
-    when:
-      event:
-        - pull_request
-        - push
   - name: release (skip publish)
     image: *goreleaser
     commands:
-      - goreleaser release --skip-publish
+      - goreleaser release --snapshot
     environment:
       GOPATH: /go
     volumes: *volumes
