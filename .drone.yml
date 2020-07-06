@@ -45,7 +45,7 @@ steps:
     environment:
       GOPATH: /go
   - name: golangci-lint
-    image: golangci/golangci-lint:v1.27.0-alpine
+    image: golangci/golangci-lint:v1.28.0-alpine
     commands:
       - golangci-lint run
     environment:
