@@ -62,7 +62,7 @@ func (runner Runner) action(c *cli.Context) error {
 		ConfigWriter: config.Writer{Path: dest},
 	}
 
-	w.HandleEvent = func(watch.Event) {
+	w.HandleEvent = func() {
 		log.Println("detect the update of " + src)
 		if err := ctrl.Generate(targets); err != nil {
 			log.Println("failed to update "+dest, err)

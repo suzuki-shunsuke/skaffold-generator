@@ -13,7 +13,7 @@ const polingCycle = 100 * time.Millisecond
 
 type Watcher struct {
 	watcher     *watcher.Watcher
-	HandleEvent func(Event)
+	HandleEvent func()
 }
 
 func New() Watcher {
@@ -25,14 +25,12 @@ func New() Watcher {
 	}
 }
 
-type Event struct{}
-
 func (watcher Watcher) Start(ctx context.Context, src, dest string) error {
 	go func() {
 		for {
 			select {
 			case <-watcher.watcher.Event:
-				watcher.HandleEvent(Event{})
+				watcher.HandleEvent()
 			case err := <-watcher.watcher.Error:
 				log.Println("error occurs on watching "+src, err)
 			case <-watcher.watcher.Closed:
