@@ -63,7 +63,9 @@ func (parser *ConfigParser) calcTargets(
 	return nil
 }
 
-func (parser *ConfigParser) CalcTargets(cfg map[string]map[string]struct{}, targets map[string]struct{}) (map[string]struct{}, error) {
+func (parser *ConfigParser) CalcTargets(
+	cfg map[string]map[string]struct{}, targets map[string]struct{},
+) (map[string]struct{}, error) {
 	ret := map[string]struct{}{}
 	for target := range targets {
 		if err := parser.calcTargets(cfg, target, ret); err != nil {
