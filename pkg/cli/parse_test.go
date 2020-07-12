@@ -115,14 +115,14 @@ func TestConfigParser_SetArtifacts(t *testing.T) {
 func TestConfigParser_Parse(t *testing.T) { //nolint:funlen
 	data := []struct {
 		title   string
-		cfg     *cli.Config
+		cfg     cli.Config
 		targets map[string]struct{}
 		exp     map[string]interface{}
 		isErr   bool
 	}{
 		{
 			title: "normal",
-			cfg: &cli.Config{
+			cfg: cli.Config{
 				Services: []cli.ServiceConfig{
 					{
 						Name:      "mongodb",
@@ -153,7 +153,7 @@ func TestConfigParser_Parse(t *testing.T) { //nolint:funlen
 		},
 		{
 			title: "dependency",
-			cfg: &cli.Config{
+			cfg: cli.Config{
 				Services: []cli.ServiceConfig{
 					{
 						Name:      "mongodb",

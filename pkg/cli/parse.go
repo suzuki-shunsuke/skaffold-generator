@@ -76,7 +76,7 @@ func (parser ConfigParser) CalcTargets(
 	return ret, nil
 }
 
-func (parser ConfigParser) Parse(cfg *Config, targets map[string]struct{}) (map[string]interface{}, error) {
+func (parser ConfigParser) Parse(cfg Config, targets map[string]struct{}) (map[string]interface{}, error) {
 	dependencyMap := make(map[string]map[string]struct{}, len(cfg.Services))
 	for _, service := range cfg.Services {
 		dependencies := make(map[string]struct{}, len(service.DependsOn))

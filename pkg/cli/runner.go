@@ -147,15 +147,15 @@ type ConfigParser struct {
 	path string
 }
 
-func (parser ConfigParser) Read() (*Config, error) {
+func (parser ConfigParser) Read() (Config, error) {
 	f, err := os.Open(parser.path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open skaffold-generator.yaml: %w", err)
+		return Config{}, fmt.Errorf("failed to open skaffold-generator.yaml: %w", err)
 	}
 	defer f.Close()
-	cfg := &Config{}
-	if err := yaml.NewDecoder(f).Decode(cfg); err != nil {
-		return nil, fmt.Errorf("failed to read skaffold-generator.yaml as YAML: %w", err)
+	cfg := Config{}
+	if err := yaml.NewDecoder(f).Decode(&cfg); err != nil {
+		return cfg, fmt.Errorf("failed to read skaffold-generator.yaml as YAML: %w", err)
 	}
 	return cfg, nil
 }
