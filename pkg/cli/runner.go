@@ -21,7 +21,7 @@ type Runner struct {
 }
 
 func (runner Runner) Run(ctx context.Context, args ...string) error {
-	app := &cli.App{
+	app := cli.App{
 		Name:            "skaffold-generator",
 		Usage:           "generate skaffold.yaml",
 		Version:         constant.Version,
