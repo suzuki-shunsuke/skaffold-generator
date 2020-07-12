@@ -24,7 +24,7 @@ func core() error {
 		syscall.SIGTERM, syscall.SIGQUIT)
 	sentSignals := map[os.Signal]struct{}{}
 
-	runner := &cli.Runner{}
+	runner := cli.Runner{}
 	ctx := context.Background()
 
 	go func() {
