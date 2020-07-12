@@ -46,6 +46,8 @@ func (runner *Runner) Run(ctx context.Context, args ...string) error {
 	return app.RunContext(ctx, args)
 }
 
+const polingCycle = 100 * time.Millisecond
+
 func (runner *Runner) action(c *cli.Context) error {
 	w := watcher.New()
 	w.SetMaxEvents(1)
@@ -89,7 +91,7 @@ func (runner *Runner) action(c *cli.Context) error {
 	}
 
 	log.Println("start to watch " + src)
-	if err := w.Start(time.Millisecond * 100); err != nil {
+	if err := w.Start(polingCycle); err != nil {
 		return fmt.Errorf("failed to start watching: %w", err)
 	}
 

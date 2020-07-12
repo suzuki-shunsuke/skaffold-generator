@@ -1,10 +1,11 @@
-package cli
+package cli_test
 
 import (
 	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"github.com/suzuki-shunsuke/skaffold-generator/pkg/cli"
 )
 
 func TestConfigParser_SetManifests(t *testing.T) {
@@ -54,8 +55,9 @@ func TestConfigParser_SetManifests(t *testing.T) {
 			},
 		},
 	}
-	parser := &ConfigParser{}
+	parser := &cli.ConfigParser{}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			err := parser.SetManifests(d.cfg, d.manifests)
 			if d.isErr {
@@ -95,8 +97,9 @@ func TestConfigParser_SetArtifacts(t *testing.T) {
 			},
 		},
 	}
-	parser := &ConfigParser{}
+	parser := &cli.ConfigParser{}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			err := parser.SetArtifacts(d.cfg, d.artifacts)
 			if d.isErr {
@@ -109,18 +112,18 @@ func TestConfigParser_SetArtifacts(t *testing.T) {
 	}
 }
 
-func TestConfigParser_Parse(t *testing.T) {
+func TestConfigParser_Parse(t *testing.T) { //nolint:funlen
 	data := []struct {
 		title   string
-		cfg     *Config
+		cfg     *cli.Config
 		targets map[string]struct{}
 		exp     map[string]interface{}
 		isErr   bool
 	}{
 		{
 			title: "normal",
-			cfg: &Config{
-				Services: []ServiceConfig{
+			cfg: &cli.Config{
+				Services: []cli.ServiceConfig{
 					{
 						Name:      "mongodb",
 						Manifests: []string{"mongodb.yaml"},
@@ -150,8 +153,8 @@ func TestConfigParser_Parse(t *testing.T) {
 		},
 		{
 			title: "dependency",
-			cfg: &Config{
-				Services: []ServiceConfig{
+			cfg: &cli.Config{
+				Services: []cli.ServiceConfig{
 					{
 						Name:      "mongodb",
 						Manifests: []string{"mongodb.yaml"},
@@ -202,8 +205,9 @@ func TestConfigParser_Parse(t *testing.T) {
 			},
 		},
 	}
-	parser := &ConfigParser{}
+	parser := &cli.ConfigParser{}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			cfg, err := parser.Parse(d.cfg, d.targets)
 			if d.isErr {
@@ -220,95 +224,6 @@ func TestConfigParser_Parse(t *testing.T) {
 			manifests := cfg["deploy"].(map[string]interface{})["kubectl"].(map[string]interface{})["manifests"].([]string)
 			sort.Strings(manifests)
 			require.Equal(t, d.exp, cfg)
-		})
-	}
-}
-
-func TestConfigParser_calcTargets(t *testing.T) {
-	data := []struct {
-		title   string
-		cfg     map[string]map[string]struct{}
-		target  string
-		targets map[string]struct{}
-		exp     map[string]struct{}
-		isErr   bool
-	}{
-		{
-			title: "normal",
-			cfg: map[string]map[string]struct{}{
-				"mongodb": {},
-				"app":     {},
-			},
-			target:  "mongodb",
-			targets: map[string]struct{}{},
-			exp:     map[string]struct{}{"mongodb": {}},
-		},
-		{
-			title: "dependency",
-			cfg: map[string]map[string]struct{}{
-				"mongodb": {},
-				"app": {
-					"mongodb": {},
-				},
-			},
-			target:  "app",
-			targets: map[string]struct{}{},
-			exp: map[string]struct{}{
-				"app":     {},
-				"mongodb": {},
-			},
-		},
-		{
-			title: "dependency 2",
-			cfg: map[string]map[string]struct{}{
-				"mongodb": {},
-				"app": {
-					"mongodb": {},
-					"api":     {},
-				},
-				"api": {
-					"mongodb": {},
-				},
-				"foo": {},
-				"bar": {},
-			},
-			target:  "app",
-			targets: map[string]struct{}{"foo": {}},
-			exp: map[string]struct{}{
-				"app":     {},
-				"api":     {},
-				"mongodb": {},
-				"foo":     {},
-			},
-		},
-		{
-			title: "circular dependency",
-			cfg: map[string]map[string]struct{}{
-				"mongodb": {
-					"app": {},
-				},
-				"app": {
-					"mongodb": {},
-				},
-			},
-			target:  "app",
-			targets: map[string]struct{}{},
-			exp: map[string]struct{}{
-				"app":     {},
-				"mongodb": {},
-			},
-		},
-	}
-	parser := &ConfigParser{}
-	for _, d := range data {
-		t.Run(d.title, func(t *testing.T) {
-			err := parser.calcTargets(d.cfg, d.target, d.targets)
-			if d.isErr {
-				require.NotNil(t, err)
-				return
-			}
-			require.Nil(t, err)
-			require.Equal(t, d.exp, d.targets)
 		})
 	}
 }
@@ -346,8 +261,9 @@ func TestConfigParser_CalcTargets(t *testing.T) {
 			},
 		},
 	}
-	parser := &ConfigParser{}
+	parser := &cli.ConfigParser{}
 	for _, d := range data {
+		d := d
 		t.Run(d.title, func(t *testing.T) {
 			targets, err := parser.CalcTargets(d.cfg, d.targets)
 			if d.isErr {
