@@ -20,7 +20,7 @@ type Runner struct {
 	Stderr io.Writer
 }
 
-func (runner *Runner) Run(ctx context.Context, args ...string) error {
+func (runner Runner) Run(ctx context.Context, args ...string) error {
 	app := &cli.App{
 		Name:            "skaffold-generator",
 		Usage:           "generate skaffold.yaml",
@@ -48,7 +48,7 @@ func (runner *Runner) Run(ctx context.Context, args ...string) error {
 
 const polingCycle = 100 * time.Millisecond
 
-func (runner *Runner) action(c *cli.Context) error {
+func (runner Runner) action(c *cli.Context) error {
 	w := watcher.New()
 	w.SetMaxEvents(1)
 	w.FilterOps(watcher.Write, watcher.Create)
@@ -98,7 +98,7 @@ func (runner *Runner) action(c *cli.Context) error {
 	return nil
 }
 
-func (runner *Runner) Generate(parser *ConfigParser, writer *ConfigWriter, targets map[string]struct{}) error {
+func (runner Runner) Generate(parser *ConfigParser, writer *ConfigWriter, targets map[string]struct{}) error {
 	cfg, err := parser.Read()
 	if err != nil {
 		return fmt.Errorf("failed to read skaffold-generator.yaml: %w", err)
