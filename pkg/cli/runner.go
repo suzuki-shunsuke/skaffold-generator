@@ -61,7 +61,7 @@ func (runner Runner) action(c *cli.Context) error {
 	dest := c.String("dest")
 
 	parser := &ConfigParser{path: src}
-	writer := &ConfigWriter{path: dest}
+	writer := ConfigWriter{path: dest}
 
 	if err := runner.Generate(parser, writer, targets); err != nil {
 		log.Println("failed to update "+dest, err)
@@ -98,7 +98,7 @@ func (runner Runner) action(c *cli.Context) error {
 	return nil
 }
 
-func (runner Runner) Generate(parser *ConfigParser, writer *ConfigWriter, targets map[string]struct{}) error {
+func (runner Runner) Generate(parser *ConfigParser, writer ConfigWriter, targets map[string]struct{}) error {
 	cfg, err := parser.Read()
 	if err != nil {
 		return fmt.Errorf("failed to read skaffold-generator.yaml: %w", err)
@@ -117,7 +117,7 @@ type ConfigWriter struct {
 	path string
 }
 
-func (writer *ConfigWriter) Write(cfg interface{}) error {
+func (writer ConfigWriter) Write(cfg interface{}) error {
 	dest := writer.path
 
 	f, err := os.Create(dest)
