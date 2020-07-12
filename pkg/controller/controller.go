@@ -6,11 +6,6 @@ import (
 	"github.com/suzuki-shunsuke/skaffold-generator/pkg/config"
 )
 
-type Params struct {
-	Src  string
-	Dest string
-}
-
 type ConfigParser interface {
 	Read() (config.Config, error)
 	Parse(cfg config.Config, targets map[string]struct{}) (map[string]interface{}, error)
