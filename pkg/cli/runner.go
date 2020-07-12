@@ -2,15 +2,13 @@ package cli
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"log"
-	"time"
 
-	"github.com/radovskyb/watcher"
 	"github.com/suzuki-shunsuke/skaffold-generator/pkg/config"
 	"github.com/suzuki-shunsuke/skaffold-generator/pkg/constant"
 	"github.com/suzuki-shunsuke/skaffold-generator/pkg/controller"
+	"github.com/suzuki-shunsuke/skaffold-generator/pkg/watch"
 	"github.com/urfave/cli/v2"
 )
 
@@ -46,12 +44,7 @@ func (runner Runner) Run(ctx context.Context, args ...string) error {
 	return app.RunContext(ctx, args)
 }
 
-const polingCycle = 100 * time.Millisecond
-
 func (runner Runner) action(c *cli.Context) error {
-	w := watcher.New()
-	w.SetMaxEvents(1)
-	w.FilterOps(watcher.Write, watcher.Create)
 	// targets is a list of service names.
 	// targets and services which targets depend on are launched.
 	targets := make(map[string]struct{}, c.Args().Len())
@@ -62,42 +55,23 @@ func (runner Runner) action(c *cli.Context) error {
 	src := c.String("src")
 	dest := c.String("dest")
 
+	w := watch.New()
+
 	ctrl := controller.Controller{
 		ConfigParser: config.Parser{Path: src},
 		ConfigWriter: config.Writer{Path: dest},
+	}
+
+	w.HandleEvent = func(watch.Event) {
+		log.Println("detect the update of " + src)
+		if err := ctrl.Generate(targets); err != nil {
+			log.Println("failed to update "+dest, err)
+		}
 	}
 
 	if err := ctrl.Generate(targets); err != nil {
 		log.Println("failed to update "+dest, err)
 	}
 
-	go func() {
-		for {
-			select {
-			case <-w.Event:
-				log.Println("detect the update of " + src)
-				if err := ctrl.Generate(targets); err != nil {
-					log.Println("failed to update "+dest, err)
-				}
-			case err := <-w.Error:
-				log.Println("error occurs on watching "+src, err)
-			case <-w.Closed:
-				log.Println("watcher is closed")
-				return
-			case <-c.Done():
-				w.Close()
-			}
-		}
-	}()
-
-	if err := w.Add(src); err != nil {
-		return err
-	}
-
-	log.Println("start to watch " + src)
-	if err := w.Start(polingCycle); err != nil {
-		return fmt.Errorf("failed to start watching: %w", err)
-	}
-
-	return nil
+	return w.Start(c.Context, src, dest)
 }
