@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (parser *ConfigParser) SetArtifacts(cfg map[string]interface{}, artifacts []interface{}) error {
+func (parser ConfigParser) SetArtifacts(cfg map[string]interface{}, artifacts []interface{}) error {
 	b, ok := cfg["build"]
 	if !ok {
 		b = map[string]interface{}{}
@@ -19,7 +19,7 @@ func (parser *ConfigParser) SetArtifacts(cfg map[string]interface{}, artifacts [
 	return nil
 }
 
-func (parser *ConfigParser) SetManifests(cfg map[string]interface{}, manifests []string) error {
+func (parser ConfigParser) SetManifests(cfg map[string]interface{}, manifests []string) error {
 	d, ok := cfg["deploy"]
 	if !ok {
 		d = map[string]interface{}{}
@@ -43,7 +43,7 @@ func (parser *ConfigParser) SetManifests(cfg map[string]interface{}, manifests [
 	return nil
 }
 
-func (parser *ConfigParser) calcTargets(
+func (parser ConfigParser) calcTargets(
 	cfg map[string]map[string]struct{}, target string, targets map[string]struct{},
 ) error {
 	if _, ok := targets[target]; ok {
@@ -63,7 +63,7 @@ func (parser *ConfigParser) calcTargets(
 	return nil
 }
 
-func (parser *ConfigParser) CalcTargets(
+func (parser ConfigParser) CalcTargets(
 	cfg map[string]map[string]struct{}, targets map[string]struct{},
 ) (map[string]struct{}, error) {
 	ret := map[string]struct{}{}
@@ -76,7 +76,7 @@ func (parser *ConfigParser) CalcTargets(
 	return ret, nil
 }
 
-func (parser *ConfigParser) Parse(cfg *Config, targets map[string]struct{}) (map[string]interface{}, error) {
+func (parser ConfigParser) Parse(cfg *Config, targets map[string]struct{}) (map[string]interface{}, error) {
 	dependencyMap := make(map[string]map[string]struct{}, len(cfg.Services))
 	for _, service := range cfg.Services {
 		dependencies := make(map[string]struct{}, len(service.DependsOn))

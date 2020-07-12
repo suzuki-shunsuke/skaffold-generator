@@ -60,7 +60,7 @@ func (runner Runner) action(c *cli.Context) error {
 	src := c.String("src")
 	dest := c.String("dest")
 
-	parser := &ConfigParser{path: src}
+	parser := ConfigParser{path: src}
 	writer := ConfigWriter{path: dest}
 
 	if err := runner.Generate(parser, writer, targets); err != nil {
@@ -98,7 +98,7 @@ func (runner Runner) action(c *cli.Context) error {
 	return nil
 }
 
-func (runner Runner) Generate(parser *ConfigParser, writer ConfigWriter, targets map[string]struct{}) error {
+func (runner Runner) Generate(parser ConfigParser, writer ConfigWriter, targets map[string]struct{}) error {
 	cfg, err := parser.Read()
 	if err != nil {
 		return fmt.Errorf("failed to read skaffold-generator.yaml: %w", err)
@@ -147,7 +147,7 @@ type ConfigParser struct {
 	path string
 }
 
-func (parser *ConfigParser) Read() (*Config, error) {
+func (parser ConfigParser) Read() (*Config, error) {
 	f, err := os.Open(parser.path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open skaffold-generator.yaml: %w", err)

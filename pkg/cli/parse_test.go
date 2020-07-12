@@ -55,7 +55,7 @@ func TestConfigParser_SetManifests(t *testing.T) {
 			},
 		},
 	}
-	parser := &cli.ConfigParser{}
+	parser := cli.ConfigParser{}
 	for _, d := range data {
 		d := d
 		t.Run(d.title, func(t *testing.T) {
@@ -97,7 +97,7 @@ func TestConfigParser_SetArtifacts(t *testing.T) {
 			},
 		},
 	}
-	parser := &cli.ConfigParser{}
+	parser := cli.ConfigParser{}
 	for _, d := range data {
 		d := d
 		t.Run(d.title, func(t *testing.T) {
@@ -205,7 +205,7 @@ func TestConfigParser_Parse(t *testing.T) { //nolint:funlen
 			},
 		},
 	}
-	parser := &cli.ConfigParser{}
+	parser := cli.ConfigParser{}
 	for _, d := range data {
 		d := d
 		t.Run(d.title, func(t *testing.T) {
@@ -261,7 +261,7 @@ func TestConfigParser_CalcTargets(t *testing.T) {
 			},
 		},
 	}
-	parser := &cli.ConfigParser{}
+	parser := cli.ConfigParser{}
 	for _, d := range data {
 		d := d
 		t.Run(d.title, func(t *testing.T) {

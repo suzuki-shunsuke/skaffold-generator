@@ -81,7 +81,7 @@ func TestConfigParser_calcTargets(t *testing.T) { //nolint:funlen
 			},
 		},
 	}
-	parser := &ConfigParser{}
+	parser := ConfigParser{}
 	for _, d := range data {
 		d := d
 		t.Run(d.title, func(t *testing.T) {
