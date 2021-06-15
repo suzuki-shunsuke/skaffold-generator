@@ -1,2 +1,2 @@
-FROM alpine:3.11.3
+FROM alpine:3.14.0
 ENTRYPOINT ["tail", "-f", "/dev/null"]
