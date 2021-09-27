@@ -77,7 +77,7 @@ steps:
       event:
         - tag
   - name: release
-    image: goreleaser/goreleaser:v0.180.1
+    image: goreleaser/goreleaser:v0.180.2
     commands:
       - goreleaser release
     environment:
@@ -90,7 +90,7 @@ steps:
         - tag
 
   - name: release (skip publish)
-    image: goreleaser/goreleaser:v0.180.1
+    image: goreleaser/goreleaser:v0.180.2
     commands:
       - goreleaser release --snapshot
     environment:
