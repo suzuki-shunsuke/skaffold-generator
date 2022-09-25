@@ -1,6 +1,6 @@
 module github.com/suzuki-shunsuke/skaffold-generator
 
-go 1.14
+go 1.19
 
 require (
 	github.com/radovskyb/watcher v1.0.7
